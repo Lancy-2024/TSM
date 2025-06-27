@@ -1,8 +1,3 @@
----
-
-
----
-
 <h2 id="modification-in-original-tsm-code">Modification in Original TSM Code</h2>
 <p><a href="http://main.py">main.py</a><br>
 1.Add a parameter <strong>split_name</strong> in train_loader and val_loader to provide correct path. The value of split_name should be train or val.</p>
