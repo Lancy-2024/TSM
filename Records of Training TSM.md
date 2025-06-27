@@ -1,5 +1,10 @@
+---
+
+
+---
+
 <h2 id="modification-in-original-tsm-code">Modification in Original TSM Code</h2>
-<p><a href="http://main.py">main.py</a><br>
+<p><a href="https://github.com/mit-han-lab/temporal-shift-module/blob/master/main.py">main.py</a><br>
 1.Add a parameter <strong>split_name</strong> in train_loader and val_loader to provide correct path. The value of split_name should be train or val.</p>
 <p>For train_loader, the path should be /mnt/home/msc/k400/images/train…<br>
 For val_loader, the path should be /mnt/home/msc/k400/images/val…</p>
@@ -18,7 +23,7 @@ For val_loader, the path should be /mnt/home/msc/k400/images/val…</p>
     num_workers=args.workers, pin_memory=True,
     drop_last=True)  # prevent something not % n_GPU
 </code></pre>
-<p><a href="http://util.py">util.py</a><br>
+<p><a href="https://github.com/mit-han-lab/temporal-shift-module/blob/master/ops/utils.py">util.py</a><br>
 2.Use correct[:k].<strong>reshape</strong> instead of correct[:k].view to fix an error</p>
 <pre><code>def accuracy(output, target, topk=(1,)):
     """Computes the precision@k for the specified values of k"""
@@ -37,7 +42,7 @@ For val_loader, the path should be /mnt/home/msc/k400/images/val…</p>
     return res
 </code></pre>
 <h2 id="modification-in-our-tsm-code">Modification in Our TSM Code</h2>
-<p><a href="http://main.py">main.py</a><br>
+<p><a href="https://github.com/SAILTECHTEAM/Python-TSM-Training/blob/main/main.py">main.py</a><br>
 1.Revise the value of num_classes, because there are 400 classes.</p>
 <pre><code>#num_classes = 3 
 num_classes = 400
@@ -52,21 +57,18 @@ If not, some errors will occur when running.</p>
 train_class_counts = {i: 0 for i in range(400)}
 val_class_counts = {i: 0 for i in range(400)}
     
-
 # Iterate over the training data loader and count class occurrences
 #for inputs, labels in train_loader:
 #    for label in labels:
 #        train_class_counts[int(label)] += 1
-
 # Iterate over the validation data loader and count class occurrences
 #for inputs, labels in val_loader:
 #    for label in labels:
 #        val_class_counts[int(label)] += 1
 # Calculate and print class weights for the train and validation set
-
 print("\nClass Counts (Train and Validation):")
 </code></pre>
-<p><a href="http://util.py">util.py</a><br>
+<p><a href="https://github.com/SAILTECHTEAM/Python-TSM-Training/blob/main/ops/utils.py">util.py</a><br>
 4.Modify function <strong>model_performance(output, target)</strong><br>
 For dataset with 400 classes, we should initialize <strong>tp, fp and fn</strong> with 400 elements so that each class has a dedicated counter.<br>
 Also, use <strong>range(400)</strong> instead of range(3)</p>
