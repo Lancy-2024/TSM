@@ -26,20 +26,20 @@ For val_loader, the path should be /mnt/home/msc/k400/images/val…</p>
 <p><a href="https://github.com/mit-han-lab/temporal-shift-module/blob/master/ops/utils.py">util.py</a><br>
 2.Use correct[:k].<strong>reshape</strong> instead of correct[:k].view to fix an error</p>
 <pre><code>def accuracy(output, target, topk=(1,)):
-    """Computes the precision@k for the specified values of k"""
-    maxk = max(topk)
-    batch_size = target.size(0)
-
-    _, pred = output.topk(maxk, 1, True, True)
-    pred = pred.t()
-    correct = pred.eq(target.view(1, -1).expand_as(pred))
-
-    res = []
-    for k in topk:
-        #correct_k = correct[:k].view(-1).float().sum(0)
-        correct_k = correct[:k].reshape(-1).float().sum(0)
-        res.append(correct_k.mul_(100.0 / batch_size))
-    return res
+        """Computes the precision@k for the specified values of k"""
+        maxk = max(topk)
+        batch_size = target.size(0)
+    
+        _, pred = output.topk(maxk, 1, True, True)
+        pred = pred.t()
+        correct = pred.eq(target.view(1, -1).expand_as(pred))
+    
+        res = []
+        for k in topk:
+            #correct_k = correct[:k].view(-1).float().sum(0)
+            correct_k = correct[:k].reshape(-1).float().sum(0)
+            res.append(correct_k.mul_(100.0 / batch_size))
+        return res
 </code></pre>
 <h2 id="modification-in-our-tsm-code">Modification in Our TSM Code</h2>
 <p><a href="https://github.com/SAILTECHTEAM/Python-TSM-Training/blob/main/main.py">main.py</a><br>
@@ -73,34 +73,34 @@ print("\nClass Counts (Train and Validation):")
 4.Modify function <strong>model_performance(output, target)</strong><br>
 For dataset with 400 classes, we should initialize <strong>tp, fp and fn</strong> with 400 elements so that each class has a dedicated counter.<br>
 Also, use <strong>range(400)</strong> instead of range(3)</p>
-<pre><code># Initialize counts for each class
-#tp = [0, 0, 0]
-#fp = [0, 0, 0]
-#fn = [0, 0, 0]
-tp = np.zeros(400, dtype=np.int32)
-fp = np.zeros(400, dtype=np.int32)
-fn = np.zeros(400, dtype=np.int32)
-...
-# Calculate precision, recall, and F1 score for each class
-precision = []
-recall = []
-f1 = []
-#for i in range(3):  # number of class
-for i in range(400):  # number of class
-    if tp[i] + fp[i] == 0:
-        precision.append(0)
-    else:
-        precision.append(tp[i] / (tp[i] + fp[i]))
+<pre><code>   # Initialize counts for each class
+    #tp = [0, 0, 0]
+    #fp = [0, 0, 0]
+    #fn = [0, 0, 0]
+    tp = np.zeros(400, dtype=np.int32)
+    fp = np.zeros(400, dtype=np.int32)
+    fn = np.zeros(400, dtype=np.int32)
+    ...
+    # Calculate precision, recall, and F1 score for each class
+    precision = []
+    recall = []
+    f1 = []
+    #for i in range(3):  # number of class
+    for i in range(400):  # number of class
+        if tp[i] + fp[i] == 0:
+            precision.append(0)
+        else:
+            precision.append(tp[i] / (tp[i] + fp[i]))
 
-    if tp[i] + fn[i] == 0:
-        recall.append(0)
-    else:
-        recall.append(tp[i] / (tp[i] + fn[i]))
+        if tp[i] + fn[i] == 0:
+            recall.append(0)
+        else:
+            recall.append(tp[i] / (tp[i] + fn[i]))
 
-    if precision[i] + recall[i] == 0:
-        f1.append(0)
-    else:
-        f1.append(2 * precision[i] * recall[i] / (precision[i] + recall[i]))
+        if precision[i] + recall[i] == 0:
+            f1.append(0)
+        else:
+            f1.append(2 * precision[i] * recall[i] / (precision[i] + recall[i]))
 </code></pre>
 <h2 id="training">Training</h2>
 <p>Use the same command to train the original TSM and our TSM.</p>
