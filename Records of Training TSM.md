@@ -29,11 +29,9 @@ For val_loader, the path should be /mnt/home/msc/k400/images/val…</p>
         """Computes the precision@k for the specified values of k"""
         maxk = max(topk)
         batch_size = target.size(0)
-    
         _, pred = output.topk(maxk, 1, True, True)
         pred = pred.t()
         correct = pred.eq(target.view(1, -1).expand_as(pred))
-    
         res = []
         for k in topk:
             #correct_k = correct[:k].view(-1).float().sum(0)
@@ -66,14 +64,14 @@ for inputs, labels in val_loader:
     for label in labels:
         val_class_counts[int(label)] += 1
 #Calculate and print class weights for the train and validation set
-‘’‘
+'''
 print("\nClass Counts (Train and Validation):")
 </code></pre>
 <p><a href="https://github.com/SAILTECHTEAM/Python-TSM-Training/blob/main/ops/utils.py">util.py</a><br>
 4.Modify function <strong>model_performance(output, target)</strong><br>
 For dataset with 400 classes, we should initialize <strong>tp, fp and fn</strong> with 400 elements so that each class has a dedicated counter.<br>
 Also, use <strong>range(400)</strong> instead of range(3)</p>
-<pre><code>   # Initialize counts for each class
+<pre><code> # Initialize counts for each class
     #tp = [0, 0, 0]
     #fp = [0, 0, 0]
     #fn = [0, 0, 0]
@@ -91,12 +89,10 @@ Also, use <strong>range(400)</strong> instead of range(3)</p>
             precision.append(0)
         else:
             precision.append(tp[i] / (tp[i] + fp[i]))
-
         if tp[i] + fn[i] == 0:
             recall.append(0)
         else:
-            recall.append(tp[i] / (tp[i] + fn[i]))
-
+            recall.append(tp[i] / (tp[i] + fn[i]))   
         if precision[i] + recall[i] == 0:
             f1.append(0)
         else:
