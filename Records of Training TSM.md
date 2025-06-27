@@ -56,16 +56,17 @@ If not, some errors will occur when running.</p>
 #val_class_counts = {0: 0, 1: 0, 2: 0}
 train_class_counts = {i: 0 for i in range(400)}
 val_class_counts = {i: 0 for i in range(400)}
-    
-# Iterate over the training data loader and count class occurrences
-#for inputs, labels in train_loader:
-#    for label in labels:
-#        train_class_counts[int(label)] += 1
+'''
+#Iterate over the training data loader and count class occurrences
+for inputs, labels in train_loader:
+    for label in labels:
+        train_class_counts[int(label)] += 1
 # Iterate over the validation data loader and count class occurrences
-#for inputs, labels in val_loader:
-#    for label in labels:
-#        val_class_counts[int(label)] += 1
-# Calculate and print class weights for the train and validation set
+for inputs, labels in val_loader:
+    for label in labels:
+        val_class_counts[int(label)] += 1
+#Calculate and print class weights for the train and validation set
+‘’‘
 print("\nClass Counts (Train and Validation):")
 </code></pre>
 <p><a href="https://github.com/SAILTECHTEAM/Python-TSM-Training/blob/main/ops/utils.py">util.py</a><br>
